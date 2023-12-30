@@ -23,4 +23,8 @@ public class TopicService {
 
         return topicRepository.saveAndFlush(topic);
     }
+
+    public Topic findById(Long id) {
+        return topicRepository.findById(id).orElse(null);
+    }
 }
