@@ -12,4 +12,6 @@ public interface TopicRepository extends JpaRepository<Topic, Long> {
     Topic saveAndFlush(Topic topic);
 
     Optional<Topic> findById(Long id);
+
+    void delete(Topic topic);
 }

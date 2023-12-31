@@ -3,6 +3,7 @@ package com.devajayantha.main.services;
 import com.devajayantha.main.models.dtos.TopicDto;
 import com.devajayantha.main.models.entities.Topic;
 import com.devajayantha.main.models.repositories.TopicRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,4 +44,15 @@ public class TopicService {
 
         return Optional.empty();
     }
+
+    public void deleteTopic(Long id) {
+        Optional<Topic> topic = topicRepository.findById(id);
+
+        if (topic.isPresent()) {
+            topicRepository.delete(topic.get());
+        } else {
+            throw new EntityNotFoundException("Topic not found with id: " + id);
+        }
+    }
+
 }

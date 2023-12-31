@@ -50,4 +50,11 @@ public class TopicController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteTopic(@PathVariable("id") Long id) {
+        topicService.deleteTopic(id);
+
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
 }
