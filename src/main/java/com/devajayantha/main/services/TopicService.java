@@ -14,17 +14,17 @@ public class TopicService {
     @Autowired
     protected TopicRepository topicRepository;
 
-    public List<Topic> findAll() {
+    public List<Topic> findAllTopics() {
         return topicRepository.findAll();
     }
 
-    public Topic save(TopicDto TopicDto) {
+    public Topic createItem(TopicDto TopicDto) {
         Topic topic = new Topic(TopicDto.getTitleTopic(), TopicDto.isActive());
 
         return topicRepository.saveAndFlush(topic);
     }
 
-    public Topic findById(Long id) {
+    public Topic findTopicById(Long id) {
         return topicRepository.findById(id).orElse(null);
     }
 }

@@ -21,19 +21,19 @@ public class TopicController {
     protected TopicService topicService;
 
     @GetMapping
-    public List<Topic> index() {
-        return topicService.findAll();
+    public List<Topic> getAllTopics() {
+        return topicService.findAllTopics();
     }
 
     @PostMapping
-    public ResponseEntity<Topic> store(@Validated @RequestBody TopicDto topicDto) {
-        Topic savedTopic = topicService.save(topicDto);
+    public ResponseEntity<Topic> createTopic(@Validated @RequestBody TopicDto topicDto) {
+        Topic savedTopic = topicService.createItem(topicDto);
         return new ResponseEntity<>(savedTopic, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Topic> show(@PathVariable("id") Long id) {
-        Optional<Topic> topic = Optional.ofNullable(topicService.findById(id));
+    public ResponseEntity<Topic> getTopic(@PathVariable("id") Long id) {
+        Optional<Topic> topic = Optional.ofNullable(topicService.findTopicById(id));
 
         return topic.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
