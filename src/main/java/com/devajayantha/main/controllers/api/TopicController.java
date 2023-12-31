@@ -38,4 +38,16 @@ public class TopicController {
         return topic.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Topic> updateTopic(@PathVariable("id") Long id, @Validated @RequestBody TopicDto topicDto) {
+        try {
+            Optional<Topic> topic = topicService.updateTopic(topicDto, id);
+
+            return topic.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                    .orElseThrow(() -> new Exception("Topic not found"));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
