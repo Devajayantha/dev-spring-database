@@ -34,4 +34,22 @@ public class NewsService {
 
         return newsRepository.saveAndFlush(news);
     }
+
+    public News findNewsById(Long id) {
+        return newsRepository.findById(id).orElse(null);
+    }
+
+    public News updateNews(News news, NewsDto newsDto) {
+        Optional<Topic> topic = topicRepository.findById(newsDto.getTopicId());
+
+        if (!topic.isPresent()) {
+            throw new RuntimeException("Topic not found with id: " + newsDto.getTopicId());
+        }
+
+        news.setTitle(newsDto.getTitle());
+        news.setContent(newsDto.getContent());
+        news.setTopic(topic.get());
+
+        return newsRepository.saveAndFlush(news);
+    }
 }
