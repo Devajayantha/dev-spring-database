@@ -50,4 +50,12 @@ public class NewsController {
 
         return new ResponseEntity<>(updatedNews, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteNews(@PathVariable("id") Long id) {
+        newsService.deleteNews(id);
+
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
 }

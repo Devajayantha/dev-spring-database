@@ -5,6 +5,7 @@ import com.devajayantha.main.models.entities.News;
 import com.devajayantha.main.models.entities.Topic;
 import com.devajayantha.main.models.repositories.NewsRepository;
 import com.devajayantha.main.models.repositories.TopicRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +52,15 @@ public class NewsService {
         news.setTopic(topic.get());
 
         return newsRepository.saveAndFlush(news);
+    }
+
+    public void deleteNews(Long id) {
+        Optional<News> news = newsRepository.findById(id);
+
+        if (news.isPresent()) {
+            newsRepository.delete(news.get());
+        } else {
+            throw new EntityNotFoundException("Topic not found with id: " + id);
+        }
     }
 }

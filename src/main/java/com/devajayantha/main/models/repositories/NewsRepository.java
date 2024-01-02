@@ -16,4 +16,6 @@ public interface  NewsRepository extends JpaRepository<News, Long> {
     News saveAndFlush(News news);
 
     Optional<News> findById(Long id);
+
+    void delete(News news);
 }
