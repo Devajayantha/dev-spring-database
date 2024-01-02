@@ -27,7 +27,7 @@ public class TopicController {
 
     @PostMapping
     public ResponseEntity<Topic> createTopic(@Validated @RequestBody TopicDto topicDto) {
-        Topic savedTopic = topicService.createItem(topicDto);
+        Topic savedTopic = topicService.createTopic(topicDto);
         return new ResponseEntity<>(savedTopic, HttpStatus.CREATED);
     }
 

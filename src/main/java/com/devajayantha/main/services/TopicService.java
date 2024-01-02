@@ -20,7 +20,7 @@ public class TopicService {
         return topicRepository.findAll();
     }
 
-    public Topic createItem(TopicDto TopicDto) {
+    public Topic createTopic(TopicDto TopicDto) {
         Topic topic = new Topic(TopicDto.getTitleTopic(), TopicDto.isActive());
 
         return topicRepository.saveAndFlush(topic);
