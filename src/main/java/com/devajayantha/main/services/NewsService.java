@@ -8,6 +8,7 @@ import com.devajayantha.main.models.repositories.TopicRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class NewsService {
         return newsRepository.findAll();
     }
 
+    @Transactional
     public News createNews(NewsDto newsDto) {
         Optional<Topic> topic = topicRepository.findById(newsDto.getTopicId());
 
@@ -40,6 +42,7 @@ public class NewsService {
         return newsRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public News updateNews(News news, NewsDto newsDto) {
         Optional<Topic> topic = topicRepository.findById(newsDto.getTopicId());
 
@@ -54,6 +57,7 @@ public class NewsService {
         return newsRepository.saveAndFlush(news);
     }
 
+    @Transactional
     public void deleteNews(Long id) {
         Optional<News> news = newsRepository.findById(id);
 

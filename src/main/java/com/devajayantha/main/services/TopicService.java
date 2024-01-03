@@ -6,6 +6,7 @@ import com.devajayantha.main.models.repositories.TopicRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ public class TopicService {
         return topicRepository.findAll();
     }
 
+    @Transactional
     public Topic createTopic(TopicDto TopicDto) {
         Topic topic = new Topic(TopicDto.getTitleTopic(), TopicDto.isActive());
 
@@ -30,6 +32,7 @@ public class TopicService {
         return topicRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public Optional<Topic> updateTopic(TopicDto topicDto, Long id) {
         Optional<Topic> topic = topicRepository.findById(id);
 
@@ -45,6 +48,7 @@ public class TopicService {
         return Optional.empty();
     }
 
+    @Transactional
     public void deleteTopic(Long id) {
         Optional<Topic> topic = topicRepository.findById(id);
 
