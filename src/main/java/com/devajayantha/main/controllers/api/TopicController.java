@@ -1,5 +1,6 @@
 package com.devajayantha.main.controllers.api;
 
+import com.devajayantha.main.config.ResponseHandler;
 import com.devajayantha.main.models.dtos.TopicDto;
 import com.devajayantha.main.models.entities.Topic;
 import com.devajayantha.main.services.TopicService;
@@ -21,8 +22,10 @@ public class TopicController {
     protected TopicService topicService;
 
     @GetMapping
-    public List<Topic> getAllTopics() {
-        return topicService.findAllTopics();
+    public ResponseEntity<Object> getAllTopics() {
+        List<Topic> topics = topicService.findAllTopics();
+
+        return ResponseHandler.response("success", HttpStatus.OK, topics);
     }
 
     @PostMapping

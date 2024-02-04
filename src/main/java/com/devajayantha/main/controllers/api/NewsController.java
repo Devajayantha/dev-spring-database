@@ -1,5 +1,6 @@
 package com.devajayantha.main.controllers.api;
 
+import com.devajayantha.main.config.ResponseHandler;
 import com.devajayantha.main.models.dtos.NewsDto;
 import com.devajayantha.main.models.entities.News;
 import com.devajayantha.main.models.entities.Topic;
@@ -19,8 +20,10 @@ public class NewsController {
     protected NewsService newsService;
 
     @GetMapping
-    public List<News> getAllNews() {
-        return newsService.findAllNews();
+    public ResponseEntity<Object> getAllNews() {
+        List<News> news = newsService.findAllNews();
+
+        return ResponseHandler.response("success", HttpStatus.OK, news);
     }
 
     @PostMapping
