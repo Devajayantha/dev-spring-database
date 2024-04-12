@@ -1,6 +1,7 @@
 package com.devajayantha.main.seeders;
 
 import com.devajayantha.main.models.entities.User;
+import com.devajayantha.main.models.enums.RoleType;
 import com.devajayantha.main.models.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class UserSeeder implements CommandLineRunner {
             User entity = new User();
             entity.setName("Admin");
             entity.setEmail("admin@gmail.com");
-            entity.setRole("superadmin");
+            entity.setRole(RoleType.ADMIN);
             entity.setPassword("password");
 
             repository.saveAndFlush(entity);
