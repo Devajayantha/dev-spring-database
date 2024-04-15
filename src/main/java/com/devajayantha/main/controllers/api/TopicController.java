@@ -1,14 +1,14 @@
 package com.devajayantha.main.controllers.api;
 
-import com.devajayantha.main.config.ResponseHandler;
+import com.devajayantha.main.config.ResponseData;
 import com.devajayantha.main.models.dtos.TopicDto;
 import com.devajayantha.main.models.entities.Topic;
 import com.devajayantha.main.services.TopicService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,42 +22,45 @@ public class TopicController {
     protected TopicService topicService;
 
     @GetMapping
-    public ResponseEntity<Object> getAllTopics() {
+    public ResponseData getAllTopics() {
         List<Topic> topics = topicService.findAllTopics();
 
-        return ResponseHandler.response("success", HttpStatus.OK, topics);
+        return new ResponseData("Success", HttpStatus.OK, topics);
     }
 
     @PostMapping
-    public ResponseEntity<Topic> createTopic(@Validated @RequestBody TopicDto topicDto) {
+    public ResponseData createTopic(@Valid @RequestBody TopicDto topicDto, Errors errors) {
+        ResponseData errorMessages = ResponseData.getResponseData(errors);
+        if (errorMessages != null) return errorMessages;
+
         Topic savedTopic = topicService.createTopic(topicDto);
-        return new ResponseEntity<>(savedTopic, HttpStatus.CREATED);
+
+        return new ResponseData("Success Created", HttpStatus.OK, savedTopic);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Topic> getTopic(@PathVariable("id") Long id) {
+    public ResponseData getTopic(@PathVariable("id") Long id) throws Exception {
         Optional<Topic> topic = Optional.ofNullable(topicService.findTopicById(id));
 
-        return topic.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return topic.map(value -> new ResponseData("Success", HttpStatus.OK, topic))
+                .orElseThrow(() -> new Exception("Topic not found"));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Topic> updateTopic(@PathVariable("id") Long id, @Validated @RequestBody TopicDto topicDto) {
-        try {
-            Optional<Topic> topic = topicService.updateTopic(topicDto, id);
+    public ResponseData updateTopic(@PathVariable("id") Long id, @Valid @RequestBody TopicDto topicDto, Errors errors) throws Exception {
+        ResponseData errorMessages = ResponseData.getResponseData(errors);
+        if (errorMessages != null) return errorMessages;
 
-            return topic.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                    .orElseThrow(() -> new Exception("Topic not found"));
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        Optional<Topic> topic = topicService.updateTopic(topicDto, id);
+
+        return topic.map(value -> new ResponseData("Success Updated", HttpStatus.OK, topic))
+                .orElseThrow(() -> new Exception("Topic not found"));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteTopic(@PathVariable("id") Long id) {
+    public ResponseData deleteTopic(@PathVariable("id") Long id) {
         topicService.deleteTopic(id);
 
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return new ResponseData("Success", HttpStatus.OK, null);
     }
 }
