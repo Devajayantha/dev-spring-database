@@ -16,11 +16,6 @@ public class UserController {
     @Autowired
     protected UserService userService;
 
-    @GetMapping
-    public String test() {
-        return "Hello";
-    }
-
     @PostMapping
     public ResponseData register(@Valid @RequestBody UserDto userDto, Errors errors) {
         ResponseData errorMessages = ResponseData.getResponseData(errors);
