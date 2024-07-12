@@ -5,6 +5,10 @@ import com.devajayantha.main.models.entities.Topic;
 import com.devajayantha.main.models.repositories.TopicRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +21,18 @@ public class TopicService {
     @Autowired
     protected TopicRepository topicRepository;
 
-    public List<Topic> findAllTopics() {
-        return topicRepository.findAll();
+    public Page<Topic> findAllTopics(int page, int size) {
+        Pageable pageable = PageRequest.of(
+                page, size,
+                Sort.by(Sort.Direction.ASC, "title")
+        );
+
+        return topicRepository.findAllActiveTopics(pageable);
     }
 
     @Transactional
     public Topic createTopic(TopicDto TopicDto) {
-        Topic topic = new Topic(TopicDto.getTitleTopic(), TopicDto.isActive());
+        Topic topic = new Topic(TopicDto.getTitleTopic(), TopicDto.getIsActive());
 
         return topicRepository.saveAndFlush(topic);
     }
@@ -39,7 +48,7 @@ public class TopicService {
         if (topic.isPresent()) {
             return topic.map(model -> {
                 model.setTitle(topicDto.getTitleTopic());
-                model.setIsActive(topicDto.isActive());
+                model.setIsActive(topicDto.getIsActive());
 
                 return topicRepository.saveAndFlush(model);
             });

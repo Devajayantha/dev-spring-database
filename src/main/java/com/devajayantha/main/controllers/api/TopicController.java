@@ -7,6 +7,7 @@ import com.devajayantha.main.services.TopicService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,9 @@ public class TopicController {
     protected TopicService topicService;
 
     @GetMapping
-    public ResponseData getAllTopics() {
-        List<Topic> topics = topicService.findAllTopics();
+    public ResponseData getAllTopics(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size) {
+        Page<Topic> topics = topicService.findAllTopics(page, size);
 
         return new ResponseData("Success", HttpStatus.OK, topics);
     }

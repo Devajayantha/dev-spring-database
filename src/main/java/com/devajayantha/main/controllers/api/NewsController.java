@@ -6,6 +6,7 @@ import com.devajayantha.main.models.entities.News;
 import com.devajayantha.main.services.NewsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,9 @@ public class NewsController {
     protected NewsService newsService;
 
     @GetMapping
-    public ResponseData getAllNews() {
-        List<News> news = newsService.findAllNews();
+    public ResponseData getAllNews(@RequestParam(value = "page", defaultValue = "0") int page,
+                                   @RequestParam(value = "size", defaultValue = "10") int size){
+        Page<News> news = newsService.findAllNews(page, size);
 
         return new ResponseData("success", HttpStatus.OK, news);
     }

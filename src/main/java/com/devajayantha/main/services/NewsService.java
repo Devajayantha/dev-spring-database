@@ -7,6 +7,10 @@ import com.devajayantha.main.models.repositories.NewsRepository;
 import com.devajayantha.main.models.repositories.TopicRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +25,13 @@ public class NewsService {
     @Autowired
     protected  TopicRepository topicRepository;
 
-    public List<News> findAllNews() {
-        return newsRepository.findAll();
+    public Page<News> findAllNews(int page, int size) {
+        Pageable pageable = PageRequest.of(
+                page, size,
+                Sort.by(Sort.Direction.ASC, "title")
+        );
+
+        return newsRepository.findAll(pageable);
     }
 
     @Transactional
